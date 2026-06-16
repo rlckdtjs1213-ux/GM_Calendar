@@ -83,6 +83,22 @@ function setStatus(text, isError) {
   el.classList.toggle('status-error', !!isError);
 }
 
+function applyTheme(theme) {
+  const dark = theme === 'dark';
+  document.body.classList.toggle('dark', dark);
+  const btn = document.getElementById('themeBtn');
+  if (btn) {
+    btn.textContent = dark ? '☀️' : '🌙';
+    btn.title = dark ? '라이트모드 전환' : '다크모드 전환';
+  }
+}
+
+function toggleTheme() {
+  const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
+  applyTheme(next);
+}
+
 function setActiveTeam(team) {
   document.querySelectorAll('.team-btn').forEach((b) => {
     b.classList.toggle('active', b.dataset.team === team);
@@ -112,6 +128,9 @@ function applyEvents(payload) {
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
+  applyTheme(localStorage.getItem('theme') || 'light');
+  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+
   initCalendar();
 
   window.api.onEventsUpdate(applyEvents);

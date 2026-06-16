@@ -54,6 +54,8 @@ function createWindow() {
     minWidth: 900,
     minHeight: 600,
     title: '배포일정 캘린더',
+    show: false, // 렌더링 완료 후 한 번에 표시 (빈 흰 화면 깜빡임 방지)
+    backgroundColor: '#f4f5f7',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -62,6 +64,7 @@ function createWindow() {
   });
 
   mainWindow.removeMenu();
+  mainWindow.once('ready-to-show', () => mainWindow.show());
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 }
 
@@ -122,7 +125,11 @@ function readWorkbook(filePath) {
   if (/\.csv$/i.test(filePath)) {
     return XLSX.read(decodeCsv(fs.readFileSync(filePath)), { type: 'string' });
   }
-  return XLSX.readFile(filePath);
+  // 시트가 수십 개인 RFC 파일: 전체 파싱은 시트 수에 비례해 느려짐
+  // → 시트명만 먼저 빠르게 읽고(bookSheets), 최근 6개월+미래 시트만 실제 파싱
+  const meta = XLSX.readFile(filePath, { bookSheets: true });
+  const wanted = meta.SheetNames.filter((n) => isSheetInRange(parseSheetYM(n)));
+  return XLSX.readFile(filePath, { sheets: wanted });
 }
 
 // ── RFC 시트 파서 (GMK 기획팀 RFC 관리 시트 형식) ───────────
@@ -286,6 +293,7 @@ function readExcelFile(filePath) {
     if (!isSheetInRange(ym)) continue; // 최근 6개월+미래만
 
     const sheetObj = wb.Sheets[sheetName];
+    if (!sheetObj) continue; // 부분 파싱으로 안 읽힌 시트
     const rows2d = XLSX.utils.sheet_to_json(sheetObj, { defval: '', header: 1 });
 
     if (isRfcSheet(rows2d) && ym) {

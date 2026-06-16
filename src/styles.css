@@ -136,3 +136,58 @@ body {
 .badge-wip { background: #fdecdc; color: #c46a1f; }
 
 .m-sheet { font-size: 11px; color: #b0b5c0; margin-bottom: 16px; }
+
+/* ── 다크모드 ───────────────────────────────────────────── */
+body.dark {
+  background: #15181e;
+  color: #e2e6ee;
+}
+
+body.dark .toolbar {
+  background: #11151c;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+body.dark .btn {
+  background: #2a2f3a;
+  color: #e2e6ee;
+}
+body.dark .btn:hover { background: #353b48; }
+body.dark .btn-primary { background: #4c7dff; color: #fff; }
+body.dark .btn-primary:hover { background: #3a6af0; }
+
+body.dark .team-btn { color: #aeb6c4; }
+body.dark .team-btn:hover { background: rgba(255, 255, 255, 0.08); }
+body.dark .team-btn.active { background: #4c7dff; color: #fff; }
+
+body.dark #calendar {
+  background: #1e222b;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+  /* FullCalendar 색 변수 오버라이드 */
+  --fc-border-color: #353b48;
+  --fc-page-bg-color: #1e222b;
+  --fc-neutral-bg-color: #262b35;
+  --fc-today-bg-color: rgba(76, 125, 255, 0.12);
+  --fc-list-event-hover-bg-color: #262b35;
+  color: #e2e6ee;
+}
+
+/* 날짜 숫자, 요일 헤더, 버튼/타이틀 글자색 */
+body.dark .fc { color: #e2e6ee; }
+body.dark .fc .fc-col-header-cell-cushion,
+body.dark .fc .fc-daygrid-day-number,
+body.dark .fc .fc-toolbar-title { color: #e2e6ee; }
+body.dark .fc .fc-day-other .fc-daygrid-day-number { color: #6b7280; }
+body.dark .fc .fc-daygrid-day.fc-day-today { background: var(--fc-today-bg-color); }
+body.dark .fc-theme-standard .fc-list-day-cushion { background: #262b35; }
+
+/* 상세 팝업 */
+body.dark .modal { background: #222732; color: #e2e6ee; }
+body.dark .m-period { color: #cdd6e8; }
+body.dark .m-header { color: #8a93a6; }
+body.dark .m-dl dt { color: #8a93a6; }
+body.dark .task { border-bottom-color: #313845; }
+body.dark .tag { background: #313845; color: #b9c2d2; }
+body.dark .badge-ok { background: #25345a; color: #9db8ff; }
+body.dark .badge-wip { background: #4a3320; color: #e6a96b; }
+body.dark .m-sheet { color: #6b7280; }
