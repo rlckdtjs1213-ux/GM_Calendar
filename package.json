@@ -1,0 +1,51 @@
+{
+  "name": "deploy-calendar",
+  "version": "1.0.0",
+  "description": "배포 일정을 캘린더로 한눈에 확인하는 설치형 프로그램",
+  "main": "src/main.js",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "sample": "node scripts/make-sample.js",
+    "dist": "electron-builder",
+    "pack": "electron-builder --dir"
+  },
+  "dependencies": {
+    "chokidar": "^3.6.0",
+    "fullcalendar": "^6.1.11",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.team.deploycalendar",
+    "productName": "배포일정 캘린더",
+    "files": [
+      "src/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "배포일정 캘린더"
+    }
+  }
+}

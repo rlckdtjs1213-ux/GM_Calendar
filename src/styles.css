@@ -1,0 +1,138 @@
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: 'Malgun Gothic', 'Segoe UI', sans-serif;
+  background: #f4f5f7;
+  color: #1f2430;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: #2b3a55;
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  flex: 0 0 auto;
+}
+
+.toolbar-left { display: flex; align-items: center; gap: 16px; }
+.brand { font-size: 18px; font-weight: 700; }
+
+.team-toggle { display: inline-flex; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 8px; overflow: hidden; }
+.team-btn {
+  border: none;
+  background: transparent;
+  color: #cdd4e0;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.team-btn + .team-btn { border-left: 1px solid rgba(255, 255, 255, 0.25); }
+.team-btn:hover { background: rgba(255, 255, 255, 0.12); }
+.team-btn.active { background: #4c7dff; color: #fff; }
+
+.toolbar-right { display: flex; align-items: center; gap: 10px; }
+
+.legend { font-size: 12px; opacity: 0.9; display: inline-flex; align-items: center; gap: 5px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot-ok { background: #4c7dff; }
+.dot-wip { background: #e8893b; }
+
+.status { font-size: 13px; opacity: 0.85; }
+.status-error { color: #ffd0d0; opacity: 1; }
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  background: #e7e9ee;
+  color: #1f2430;
+  transition: background 0.15s;
+}
+.btn:hover { background: #d4d8e0; }
+.btn-primary { background: #4c7dff; color: #fff; }
+.btn-primary:hover { background: #3a6af0; }
+
+#calendar {
+  flex: 1 1 auto;
+  padding: 16px;
+  min-height: 0;
+  background: #fff;
+  margin: 12px;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* FullCalendar 이벤트 색상 */
+.fc-event {
+  background: #4c7dff;
+  border-color: #4c7dff;
+  cursor: pointer;
+}
+
+/* 상세 팝업 */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.overlay.hidden { display: none; }
+
+.modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px 28px;
+  width: 380px;
+  max-width: 90vw;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+.modal { width: 460px; }
+.modal h3 { margin: 0 0 6px; font-size: 18px; }
+
+.m-meta { margin: 0 0 14px; }
+.m-period { font-size: 15px; font-weight: 700; color: #2b3a55; }
+.m-header { font-size: 12px; color: #8a90a0; margin-top: 3px; word-break: keep-all; }
+
+.m-dl { display: grid; grid-template-columns: 64px 1fr; gap: 8px 12px; margin: 0 0 20px; }
+.m-dl dt { color: #8a90a0; font-size: 13px; }
+.m-dl dd { margin: 0; font-size: 14px; word-break: break-all; }
+
+.task-list { list-style: none; margin: 0 0 14px; padding: 0; max-height: 50vh; overflow-y: auto; }
+.task {
+  padding: 10px 0;
+  border-bottom: 1px solid #eef0f4;
+}
+.task:last-child { border-bottom: none; }
+.task-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.task-name { font-size: 14px; font-weight: 600; flex: 1 1 auto; word-break: keep-all; }
+.task-sub { font-size: 12px; color: #8a90a0; margin-top: 4px; word-break: break-all; }
+
+.tag {
+  font-size: 11px;
+  background: #eef0f4;
+  color: #5a6172;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.badge { font-size: 11px; border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
+.badge-ok { background: #e3ecff; color: #2f5fd0; }
+.badge-wip { background: #fdecdc; color: #c46a1f; }
+
+.m-sheet { font-size: 11px; color: #b0b5c0; margin-bottom: 16px; }

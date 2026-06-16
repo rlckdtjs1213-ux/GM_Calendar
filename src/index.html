@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:;" />
+    <title>배포일정 캘린더</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="toolbar">
+      <div class="toolbar-left">
+        <span class="brand">📅 배포일정 캘린더</span>
+        <div class="team-toggle">
+          <button id="team-GMK" class="team-btn" data-team="GMK">GMK</button>
+          <button id="team-GMAP" class="team-btn" data-team="GMAP">GMAP</button>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <span id="status" class="status">초기화 중…</span>
+        <button id="reloadBtn" class="btn">새로고침</button>
+        <button id="folderBtn" class="btn btn-primary">공유 폴더 설정</button>
+      </div>
+    </header>
+
+    <div id="calendar"></div>
+
+    <!-- 일정 상세 팝업 -->
+    <div id="overlay" class="overlay hidden">
+      <div class="modal">
+        <h3 id="m-title"></h3>
+        <div id="m-meta" class="m-meta"></div>
+        <div id="m-body"></div>
+        <button id="m-close" class="btn">닫기</button>
+      </div>
+    </div>
+
+    <script src="../node_modules/fullcalendar/index.global.min.js"></script>
+    <script src="../node_modules/@fullcalendar/core/locales/ko.global.min.js"></script>
+    <script src="renderer.js"></script>
+  </body>
+</html>
