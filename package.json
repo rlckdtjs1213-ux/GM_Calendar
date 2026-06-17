@@ -37,7 +37,8 @@
       {
         "provider": "github",
         "owner": "rlckdtjs1213-ux",
-        "repo": "GM_Calendar"
+        "repo": "GM_Calendar",
+        "releaseType": "release"
       }
     ],
     "win": {
