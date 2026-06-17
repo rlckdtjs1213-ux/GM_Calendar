@@ -1,6 +1,6 @@
 {
   "name": "deploy-calendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "배포 일정을 캘린더로 한눈에 확인하는 설치형 프로그램",
   "main": "src/main.js",
   "author": "",

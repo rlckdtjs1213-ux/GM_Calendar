@@ -305,14 +305,16 @@ function readExcelFile(filePath) {
   return events;
 }
 
-// 월별 시트가 월말/월초 경계에서 겹쳐 같은 배포가 두 시트에 들어 있음
-// → Task Code(고유) 기준으로 중복 제거. 코드가 없으면 날짜+제목으로.
+// 월별 시트가 월말/월초 경계에서 겹쳐 같은 배포가 두 시트에 들어 있음 → 중복 제거.
+// 단, 같은 Task Code라도 날짜가 다르면 별개 배포(예: 6/18, 6/19 재배포)이므로,
+// 키에 날짜를 포함해 "코드 + 시작일(+종료일)"이 같을 때만 중복으로 본다.
 function dedupEvents(events) {
   const seen = new Set();
   const out = [];
   for (const e of events) {
     const code = e.extendedProps && e.extendedProps.task && e.extendedProps.task.code;
-    const key = code ? `c:${code}` : `t:${e.start}|${e.end || ''}|${e.title}`;
+    const dateKey = `${e.start}|${e.end || ''}`;
+    const key = code ? `c:${code}|${dateKey}` : `t:${dateKey}|${e.title}`;
     if (seen.has(key)) continue;
     seen.add(key);
     out.push(e);
