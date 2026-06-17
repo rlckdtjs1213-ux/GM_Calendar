@@ -9,10 +9,12 @@
     "start": "electron .",
     "sample": "node scripts/make-sample.js",
     "dist": "electron-builder",
+    "publish": "electron-builder --publish always",
     "pack": "electron-builder --dir"
   },
   "dependencies": {
     "chokidar": "^3.6.0",
+    "electron-updater": "^6.8.9",
     "fullcalendar": "^6.1.11",
     "xlsx": "^0.18.5"
   },
@@ -31,11 +33,20 @@
     "directories": {
       "output": "release"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "rlckdtjs1213-ux",
+        "repo": "GM_Calendar"
+      }
+    ],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ]
     },

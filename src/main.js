@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const chokidar = require('chokidar');
 const XLSX = require('xlsx');
+const { autoUpdater } = require('electron-updater');
 
 // ── 설정 파일 (userData 폴더에 저장: 팀원마다 공유폴더 경로가 다를 수 있음) ──
 const CONFIG_PATH = path.join(app.getPath('userData'), 'config.json');
@@ -408,12 +409,58 @@ ipcMain.handle('events:reload', () => {
   return true;
 });
 
+// ── 자동 업데이트 (GitHub Releases, 버튼식) ─────────────────
+function sendUpdateStatus(state, info) {
+  if (mainWindow) mainWindow.webContents.send('update:status', { state, info });
+}
+
+function setupAutoUpdater() {
+  autoUpdater.autoDownload = true;          // 새 버전 있으면 바로 다운로드
+  autoUpdater.autoInstallOnAppQuit = true;  // 받아두면 다음 종료 시 설치
+
+  autoUpdater.on('checking-for-update', () => sendUpdateStatus('checking'));
+  autoUpdater.on('update-available', (info) => sendUpdateStatus('available', { version: info.version }));
+  autoUpdater.on('update-not-available', (info) => sendUpdateStatus('latest', { version: info.version }));
+  autoUpdater.on('download-progress', (p) => sendUpdateStatus('downloading', { percent: Math.round(p.percent) }));
+  autoUpdater.on('error', (err) => sendUpdateStatus('error', { message: String(err && err.message || err) }));
+  autoUpdater.on('update-downloaded', async (info) => {
+    sendUpdateStatus('downloaded', { version: info.version });
+    const res = await dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      buttons: ['지금 재시작하여 설치', '나중에'],
+      defaultId: 0,
+      cancelId: 1,
+      title: '업데이트 준비됨',
+      message: `새 버전 ${info.version} 다운로드 완료`,
+      detail: '지금 재시작하면 업데이트가 적용됩니다. (나중에 선택 시 다음 종료할 때 자동 설치)',
+    });
+    if (res.response === 0) {
+      setImmediate(() => autoUpdater.quitAndInstall());
+    }
+  });
+}
+
+ipcMain.handle('update:check', async () => {
+  if (!app.isPackaged) {
+    sendUpdateStatus('dev'); // 개발 모드에선 업데이트 확인 불가
+    return { dev: true };
+  }
+  try {
+    await autoUpdater.checkForUpdates();
+    return { ok: true };
+  } catch (e) {
+    sendUpdateStatus('error', { message: String(e && e.message || e) });
+    return { ok: false };
+  }
+});
+
 app.whenReady().then(() => {
   createWindow();
   const config = loadConfig();
   startWatching(activeDir(config));
 
   mainWindow.webContents.once('did-finish-load', () => pushEvents());
+  setupAutoUpdater();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

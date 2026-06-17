@@ -9,4 +9,7 @@ contextBridge.exposeInMainWorld('api', {
   reload: () => ipcRenderer.invoke('events:reload'),
   onEventsUpdate: (callback) =>
     ipcRenderer.on('events:update', (_e, payload) => callback(payload)),
+  checkUpdate: () => ipcRenderer.invoke('update:check'),
+  onUpdateStatus: (callback) =>
+    ipcRenderer.on('update:status', (_e, payload) => callback(payload)),
 });

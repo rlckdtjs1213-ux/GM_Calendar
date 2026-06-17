@@ -140,6 +140,24 @@ window.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.team-btn').forEach((b) =>
     b.addEventListener('click', () => window.api.setTeam(b.dataset.team))
   );
+
+  const updateBtn = document.getElementById('updateBtn');
+  updateBtn.addEventListener('click', () => {
+    setStatus('업데이트 확인 중…', false);
+    window.api.checkUpdate();
+  });
+  window.api.onUpdateStatus(({ state, info }) => {
+    const v = info && info.version ? ` (v${info.version})` : '';
+    switch (state) {
+      case 'checking': setStatus('업데이트 확인 중…', false); break;
+      case 'available': setStatus(`새 버전${v} 다운로드 중…`, false); break;
+      case 'downloading': setStatus(`업데이트 다운로드 ${info.percent}%`, false); break;
+      case 'downloaded': setStatus(`새 버전${v} 다운로드 완료 — 재시작하면 설치됩니다`, false); break;
+      case 'latest': setStatus(`최신 버전입니다${v}`, false); break;
+      case 'dev': setStatus('개발 모드에서는 업데이트 확인 불가 (설치본에서만 동작)', true); break;
+      case 'error': setStatus(`업데이트 확인 실패: ${info && info.message ? info.message : ''}`, true); break;
+    }
+  });
   document.getElementById('m-close').addEventListener('click', () =>
     document.getElementById('overlay').classList.add('hidden')
   );
